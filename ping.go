@@ -24,12 +24,17 @@ func main() {
 	})
 
 	r.GET("/ping", func(c *gin.Context) {
+		errorMsg := ""
 		time, err := ping()
 		// time, err := fakeTime()
 
+		if err != nil {
+			errorMsg = err.Error()
+		}
+
 		c.JSON(200, gin.H{
 			"time": time,
-			"error": err,
+			"error": errorMsg,
 		})
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080
