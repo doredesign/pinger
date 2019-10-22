@@ -9,6 +9,7 @@
         height: 100%;
         width: 100%;
         padding: 20px;
+        text-align: center;
       }
       h1#all_good {
         background-color: #2b2b2b;
@@ -39,14 +40,17 @@ Settings = {
 };
 
 $(function(){
-  $allGood = $("#all_good");
-  $warn = $("#warn");
-  $error = $("#error");
+  let $allGood = $("#all_good");
+  let $warn = $("#warn");
+  let $error = $("#error");
+  let responseReceived = false;
 
   let updateView = function(data){
     console.log(data);
+
+    responseReceived = true;
     if(data.error) return error(data.error);
-    if(data.time > Settings.errorThreashold) return error("Ping is " + data.time);
+    if(data.time > Settings.errorThreshold) return error("Ping is " + data.time);
     if(data.time < Settings.warnThreshold) return goNormal();
 
     warn("Ping is " + data.time);
@@ -66,10 +70,17 @@ $(function(){
     $error.text(text).show();
     $warn.hide();
   };
+  let shortCircuit = function(){
+    if(responseReceived === true) return; // The request completed already
+    responseReceived = true;
+    error("Request took too long");
+  };
 
   goNormal();
   window.setInterval(function(){
+    responseReceived = false;
     $.get("/ping", updateView);
+    window.setTimeout(shortCircuit, Settings.errorThreshold);
   }, 1000);
 });
     </script>
