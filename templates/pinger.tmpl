@@ -32,6 +32,12 @@
     </style>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript">
+
+Settings = {
+  warnThreshold: 300,  // milliseconds
+  errorThreashold: 500 // milliseconds
+};
+
 $(function(){
   $allGood = $("#all_good");
   $warn = $("#warn");
@@ -40,10 +46,10 @@ $(function(){
   let updateView = function(data){
     console.log(data);
     if(data.error) return error(data.error);
-    if(data.time > 500) return error("Time is " + data.time);
-    if(data.time < 300) return goNormal();
+    if(data.time > Settings.errorThreashold) return error("Ping is " + data.time);
+    if(data.time < Settings.warnThreshold) return goNormal();
 
-    warn("Time is " + data.time);
+    warn("Ping is " + data.time);
   };
   let goNormal = function(){
     $allGood.show();

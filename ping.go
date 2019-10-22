@@ -25,6 +25,7 @@ func main() {
 
 	r.GET("/ping", func(c *gin.Context) {
 		time, err := ping()
+		// time, err := fakeTime()
 
 		c.JSON(200, gin.H{
 			"time": time,
