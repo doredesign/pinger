@@ -11,18 +11,6 @@ import (
 	"time"
 )
 
-type errorString struct {
-  s string
-}
-
-func (e *errorString) Error() string {
-  return e.s
-}
-
-func New(text string) error {
-  return &errorString{text}
-}
-
 var TimeRegex *regexp.Regexp = regexp.MustCompile(`time=(\d+\.\d+)`)
 
 func main() {
