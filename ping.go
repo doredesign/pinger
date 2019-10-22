@@ -61,3 +61,10 @@ func fakeTime() (float64, error) {
 	second := time.Now().Second()
 	return float64(second * 10), nil
 }
+
+func longTime() (float64, error) {
+	second := time.Now().Second()
+	sleepTime := (50/3) * second
+	time.Sleep(time.Duration(sleepTime) * time.Millisecond)
+	return float64(sleepTime), nil
+}
