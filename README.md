@@ -1,10 +1,10 @@
 Why?
 ====
-To alert you when your ping slows down significantly.
+To alert you when your ping slows down significantly. That way you can pause your exquisite monologue to your video conference audience until your ping returns to normal.
 
 What?
 ====
-A simple go server that pings `8.8.8.8` and reports the result every second to a simple javascript UI.
+A simple Go server that pings `8.8.8.8` and reports the result every second to a simple javascript UI.
 
 How?
 ====
@@ -12,6 +12,8 @@ How?
   2. Clone this repo and navigate to its folder.
   3. Run the server: `go run ping.go`
   4. Visit http://0.0.0.0:8080 to see the UI. Use one of the links to run it in a full web page or a stripped-down popup.
+
+The page is dark gray when your ping is below the warn threshold. If you want to be sure it's working, open Developer Tools and inspect the XHR requests that happen every second. The page background turns orange when above the warn threshold and displays the ping time. When your ping gets above error threshold, or there is an error completing a ping, the background alternates between red and blue and displays the ping or error message.
 
 Some config
 ===========
