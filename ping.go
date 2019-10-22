@@ -43,10 +43,13 @@ func main() {
 func ping() (float64, error) {
 	cmd := exec.Command("ping", "-c", "1", "8.8.8.8")
 	stdoutStderr, err := cmd.CombinedOutput()
-	arrayResult := TimeRegex.FindStringSubmatch(string(stdoutStderr))
-
 	result := 0.0
-	err = errors.New("ping unsuccessful")
+	if err != nil {
+		return result, err
+	}
+
+	arrayResult := TimeRegex.FindStringSubmatch(string(stdoutStderr))
+	err = errors.New("Ping unsuccessful")
 	if len(arrayResult) > 1 {
 		result, err = strconv.ParseFloat(arrayResult[1], 64)
 	}
