@@ -3,7 +3,9 @@ package main
 import (
 	"errors"
 	"os/exec"
+	"path"
 	"regexp"
+	"runtime"
 	"strconv"
 	"time"
 
@@ -14,7 +16,9 @@ var timeRegex *regexp.Regexp = regexp.MustCompile(`time=(\d+\.\d+)`)
 
 func main() {
 	r := gin.Default()
-	r.LoadHTMLGlob("templates/*")
+	_, filename, _, _ := runtime.Caller(0)
+	templatesPath := path.Join(path.Dir(filename), "./templates/*")
+	r.LoadHTMLGlob(templatesPath)
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(200, "index.tmpl", gin.H{})
 	})
