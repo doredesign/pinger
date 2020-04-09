@@ -1,17 +1,16 @@
 package main
 
 import (
-	// "fmt"
-	// "log"
-	"github.com/gin-gonic/gin"
+	"errors"
 	"os/exec"
 	"regexp"
 	"strconv"
-	"errors"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
-var TimeRegex *regexp.Regexp = regexp.MustCompile(`time=(\d+\.\d+)`)
+var timeRegex *regexp.Regexp = regexp.MustCompile(`time=(\d+\.\d+)`)
 
 func main() {
 	r := gin.Default()
@@ -26,14 +25,14 @@ func main() {
 	r.GET("/ping", func(c *gin.Context) {
 		errorMsg := ""
 		time, err := ping()
-		// time, err := fakeTime()
+		// time, err := longTime()
 
 		if err != nil {
 			errorMsg = err.Error()
 		}
 
 		c.JSON(200, gin.H{
-			"time": time,
+			"time":  time,
 			"error": errorMsg,
 		})
 	})
@@ -48,7 +47,7 @@ func ping() (float64, error) {
 		return result, err
 	}
 
-	arrayResult := TimeRegex.FindStringSubmatch(string(stdoutStderr))
+	arrayResult := timeRegex.FindStringSubmatch(string(stdoutStderr))
 	err = errors.New("Ping unsuccessful")
 	if len(arrayResult) > 1 {
 		result, err = strconv.ParseFloat(arrayResult[1], 64)
@@ -64,7 +63,7 @@ func fakeTime() (float64, error) {
 
 func longTime() (float64, error) {
 	second := time.Now().Second()
-	sleepTime := (50/3) * second
+	sleepTime := (50 / 3) * second
 	time.Sleep(time.Duration(sleepTime) * time.Millisecond)
 	return float64(sleepTime), nil
 }

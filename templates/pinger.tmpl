@@ -35,7 +35,7 @@
     <script type="text/javascript">
 
 Settings = {
-  warnThreshold: 300,  // milliseconds
+  warnThreshold: 300, // milliseconds
   errorThreshold: 500 // milliseconds
 };
 
@@ -44,12 +44,14 @@ $(function(){
   let $warn = $("#warn");
   let $error = $("#error");
   let responseReceived = false;
+  let stateTime = 0;
 
   let updateView = function(data){
     console.log(data);
 
     responseReceived = true;
     if(data.error) return error(data.error);
+    stateTime = data.time
     if(data.time > Settings.errorThreshold) return error("Ping is " + data.time);
     if(data.time < Settings.warnThreshold) return goNormal();
 
@@ -69,6 +71,7 @@ $(function(){
     $allGood.hide();
     $error.text(text).show();
     $warn.hide();
+    errorState = true;
   };
   let shortCircuit = function(){
     if(responseReceived === true) return; // The request completed already
@@ -80,7 +83,6 @@ $(function(){
   window.setInterval(function(){
     responseReceived = false;
     $.get("/ping", updateView);
-    window.setTimeout(shortCircuit, Settings.errorThreshold);
   }, 1000);
 });
     </script>
